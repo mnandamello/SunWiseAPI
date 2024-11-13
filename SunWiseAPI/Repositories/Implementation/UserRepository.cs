@@ -14,12 +14,12 @@ namespace SunWiseAPI.Repositories.Implementation
 
         public async Task<IEnumerable<User>> GetUsers()
         {
-            return await dataContext.Usuarios.ToListAsync();
+            return await dataContext.Users.ToListAsync();
         }
 
         public async Task<User> GetUserById(string id)
         {
-            return await dataContext.Usuarios.FirstOrDefaultAsync(u => u.Uid == id);
+            return await dataContext.Users.FirstOrDefaultAsync(u => u.Uid == id);
         }
     }
 }

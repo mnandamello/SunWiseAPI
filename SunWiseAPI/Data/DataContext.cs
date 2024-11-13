@@ -7,7 +7,7 @@ namespace SunWiseAPI.Data
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
 
-        public DbSet<User> Usuarios { get; set; }
+        public DbSet<User> Users { get; set; }
         public DbSet<Cliente> Clientes { get; set; }
         public DbSet<Projeto> Projetos { get; set; }
 

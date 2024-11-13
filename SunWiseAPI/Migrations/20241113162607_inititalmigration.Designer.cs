@@ -12,7 +12,7 @@ using SunWiseAPI.Data;
 namespace SunWiseAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20241113152127_inititalmigration")]
+    [Migration("20241113162607_inititalmigration")]
     partial class inititalmigration
     {
         /// <inheritdoc />
@@ -113,7 +113,7 @@ namespace SunWiseAPI.Migrations
                         .IsRequired()
                         .HasColumnType("NVARCHAR2(2000)");
 
-                    b.Property<string>("Senha")
+                    b.Property<string>("Password")
                         .HasColumnType("NVARCHAR2(2000)");
 
                     b.Property<string>("Uid")
@@ -122,7 +122,7 @@ namespace SunWiseAPI.Migrations
 
                     b.HasKey("Email");
 
-                    b.ToTable("Usuarios");
+                    b.ToTable("Users");
                 });
 #pragma warning restore 612, 618
         }

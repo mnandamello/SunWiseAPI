@@ -50,17 +50,17 @@ namespace SunWiseAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Usuarios",
+                name: "Users",
                 columns: table => new
                 {
                     Email = table.Column<string>(type: "NVARCHAR2(450)", nullable: false),
                     Uid = table.Column<string>(type: "NVARCHAR2(2000)", nullable: false),
                     NomeEmpresa = table.Column<string>(type: "NVARCHAR2(2000)", nullable: false),
-                    Senha = table.Column<string>(type: "NVARCHAR2(2000)", nullable: true)
+                    Password = table.Column<string>(type: "NVARCHAR2(2000)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Usuarios", x => x.Email);
+                    table.PrimaryKey("PK_Users", x => x.Email);
                 });
         }
 
@@ -74,7 +74,7 @@ namespace SunWiseAPI.Migrations
                 name: "Projetos");
 
             migrationBuilder.DropTable(
-                name: "Usuarios");
+                name: "Users");
         }
     }
 }
