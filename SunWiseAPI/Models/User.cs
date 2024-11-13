@@ -1,0 +1,18 @@
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace SunWiseAPI.Models
+{
+    public class User
+    {
+        public string Uid { get; set; }
+        [Required]
+        public string NomeEmpresa { get; set; }
+
+        [Required]
+        [EmailAddress]
+        [Key]
+        public string Email { get; set; }
+
+        public string? Senha { get; set; }
+    }
+}
