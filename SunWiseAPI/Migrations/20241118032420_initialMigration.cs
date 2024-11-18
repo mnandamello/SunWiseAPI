@@ -5,7 +5,7 @@
 namespace SunWiseAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class inititalmigration : Migration
+    public partial class initialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -19,7 +19,7 @@ namespace SunWiseAPI.Migrations
                     Nome = table.Column<string>(type: "NVARCHAR2(2000)", nullable: false),
                     Email = table.Column<string>(type: "NVARCHAR2(2000)", nullable: false),
                     Endereco = table.Column<string>(type: "NVARCHAR2(2000)", nullable: false),
-                    Telefone = table.Column<string>(type: "NVARCHAR2(1)", nullable: false),
+                    Telefone = table.Column<string>(type: "NVARCHAR2(2000)", nullable: false),
                     UserId = table.Column<string>(type: "NVARCHAR2(2000)", nullable: false)
                 },
                 constraints: table =>
@@ -34,13 +34,14 @@ namespace SunWiseAPI.Migrations
                     Id = table.Column<int>(type: "NUMBER(10)", nullable: false)
                         .Annotation("Oracle:Identity", "START WITH 1 INCREMENT BY 1"),
                     NomeProjeto = table.Column<string>(type: "NVARCHAR2(2000)", nullable: false),
-                    Orçamento = table.Column<float>(type: "BINARY_FLOAT", nullable: false),
-                    ConsumoMensalKwh = table.Column<decimal>(type: "NUMBER(10,2)", nullable: false),
-                    TarifaEnergia = table.Column<decimal>(type: "NUMBER(10,2)", nullable: false),
-                    EconomiaMensal = table.Column<decimal>(type: "NUMBER(10,2)", nullable: true),
+                    Orcamento = table.Column<double>(type: "BINARY_DOUBLE", nullable: false),
+                    TarifaEnergia = table.Column<double>(type: "BINARY_DOUBLE", nullable: false),
+                    EconomiaMensal = table.Column<double>(type: "BINARY_DOUBLE", nullable: true),
                     RetornoInvestimentoMeses = table.Column<int>(type: "NUMBER(10)", nullable: true),
-                    EconomiaAcumulada10Anos = table.Column<decimal>(type: "NUMBER(10,2)", nullable: true),
-                    ImpactoAmbiental = table.Column<string>(type: "NVARCHAR2(2000)", nullable: false),
+                    EconomiaAcumulada10Anos = table.Column<double>(type: "BINARY_DOUBLE", nullable: true),
+                    RetornoEmAnos = table.Column<string>(type: "NVARCHAR2(2000)", nullable: true),
+                    ImpactoAmbiental = table.Column<string>(type: "NVARCHAR2(2000)", nullable: true),
+                    Co2Evitado10Anos = table.Column<double>(type: "BINARY_DOUBLE", nullable: true),
                     ClienteId = table.Column<int>(type: "NUMBER(10)", nullable: false),
                     UserId = table.Column<string>(type: "NVARCHAR2(2000)", nullable: false)
                 },

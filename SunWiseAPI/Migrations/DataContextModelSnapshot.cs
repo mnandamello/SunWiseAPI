@@ -44,7 +44,7 @@ namespace SunWiseAPI.Migrations
 
                     b.Property<string>("Telefone")
                         .IsRequired()
-                        .HasColumnType("NVARCHAR2(1)");
+                        .HasColumnType("NVARCHAR2(2000)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -66,31 +66,33 @@ namespace SunWiseAPI.Migrations
                     b.Property<int>("ClienteId")
                         .HasColumnType("NUMBER(10)");
 
-                    b.Property<decimal>("ConsumoMensalKwh")
-                        .HasColumnType("NUMBER(10,2)");
+                    b.Property<double?>("Co2Evitado10Anos")
+                        .HasColumnType("BINARY_DOUBLE");
 
-                    b.Property<decimal?>("EconomiaAcumulada10Anos")
-                        .HasColumnType("NUMBER(10,2)");
+                    b.Property<double?>("EconomiaAcumulada10Anos")
+                        .HasColumnType("BINARY_DOUBLE");
 
-                    b.Property<decimal?>("EconomiaMensal")
-                        .HasColumnType("NUMBER(10,2)");
+                    b.Property<double?>("EconomiaMensal")
+                        .HasColumnType("BINARY_DOUBLE");
 
                     b.Property<string>("ImpactoAmbiental")
-                        .IsRequired()
                         .HasColumnType("NVARCHAR2(2000)");
 
                     b.Property<string>("NomeProjeto")
                         .IsRequired()
                         .HasColumnType("NVARCHAR2(2000)");
 
-                    b.Property<float>("Orçamento")
-                        .HasColumnType("BINARY_FLOAT");
+                    b.Property<double>("Orcamento")
+                        .HasColumnType("BINARY_DOUBLE");
+
+                    b.Property<string>("RetornoEmAnos")
+                        .HasColumnType("NVARCHAR2(2000)");
 
                     b.Property<int?>("RetornoInvestimentoMeses")
                         .HasColumnType("NUMBER(10)");
 
-                    b.Property<decimal>("TarifaEnergia")
-                        .HasColumnType("NUMBER(10,2)");
+                    b.Property<double>("TarifaEnergia")
+                        .HasColumnType("BINARY_DOUBLE");
 
                     b.Property<string>("UserId")
                         .IsRequired()

@@ -14,7 +14,7 @@ namespace SunWiseAPI.Models
         [Required]
         public string Endereco { get; set; }
         [Required]
-        public char Telefone { get; set; }
+        public string Telefone { get; set; }
         public string UserId { get; set; }
 
     }
