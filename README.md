@@ -45,7 +45,10 @@ Para a documentação baixamos as dependencias do swagger e o configuramos na pr
 
 
 ## Testes automatizados da API
-Utilizando o Xunit e moq realizamos testes na API para os metodos de cliente e projeto
+Utilizando o Xunit e moq realizamos testes na API para os metodos de cliente
+
+![image](https://github.com/user-attachments/assets/aa18c869-5c5f-4e63-9ce2-77694e9aa742)
+
 
 <br>
 
