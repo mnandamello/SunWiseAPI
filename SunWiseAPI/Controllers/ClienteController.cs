@@ -8,6 +8,7 @@ namespace SunWiseAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ClienteController : ControllerBase
     {
         private readonly IClienteRepository _clienteRepository;

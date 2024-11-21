@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SunWiseAPI.Models;
 using SunWiseAPI.Repositories;
@@ -8,6 +9,7 @@ namespace SunWiseAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ProjetoController : ControllerBase
     {
         private readonly IProjetoRepository _projetoRepository;
