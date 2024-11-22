@@ -12,103 +12,76 @@ namespace SunWiseAPI.Tests
 {
     public class ClienteTestes
     {
-        [Fact]
-        public async Task GetClientes_ReturnsListOfClientes()
+        private readonly DataContext _context;
+        private readonly ClienteRepository _clienteRepository;
+        private readonly Mock<IUserRepository> _mockUserRepository;
+
+        public ClienteTestes()
         {
-            // Arrange
-            var clientes = new List<Cliente>
-            {
-                new Cliente { Id = 1, Nome = "Cliente 1", UserId = "1" },
-                new Cliente { Id = 2, Nome = "Cliente 2", UserId = "2" }
-            };
+            var options = new DbContextOptionsBuilder<DataContext>()
+                .UseInMemoryDatabase(databaseName: "TestDatabase")
+                .Options;
 
-            var mockSet = new Mock<DbSet<Cliente>>();
-            mockSet.As<IQueryable<Cliente>>().Setup(m => m.Provider).Returns(clientes.AsQueryable().Provider);
-            mockSet.As<IQueryable<Cliente>>().Setup(m => m.Expression).Returns(clientes.AsQueryable().Expression);
-            mockSet.As<IQueryable<Cliente>>().Setup(m => m.ElementType).Returns(clientes.AsQueryable().ElementType);
-            mockSet.As<IQueryable<Cliente>>().Setup(m => m.GetEnumerator()).Returns(clientes.AsQueryable().GetEnumerator());
-
-            mockSet.Setup(x => x.ToListAsync(It.IsAny<CancellationToken>()))
-                .ReturnsAsync(clientes);
-
-            var mockDataContext = new Mock<DataContext>();
-            mockDataContext.Setup(x => x.Clientes).Returns(mockSet.Object);
-
-            var repository = new ClienteRepository(Mock.Of<IUserRepository>(), mockDataContext.Object);
-
-            // Act
-            var result = await repository.GetClientes();
-
-            // Assert
-            Assert.NotNull(result);
-            Assert.Equal(clientes.Count, result.Count());
-            Assert.Equal(clientes, result);
+            _context = new DataContext(options);
+            _mockUserRepository = new Mock<IUserRepository>();
+            _clienteRepository = new ClienteRepository(_mockUserRepository.Object, _context);
         }
 
         [Fact]
-        public async Task GetCliente_ExistingId_ReturnsCliente()
+        public async Task GetCliente_ReturnsCliente_WhenClienteExists()
         {
             // Arrange
-            var cliente = new Cliente { Id = 1, Nome = "Cliente 1", UserId = "1" };
-
-            var clientes = new List<Cliente> { cliente };
-
-            var mockSet = new Mock<DbSet<Cliente>>();
-            mockSet.As<IQueryable<Cliente>>().Setup(m => m.Provider).Returns(clientes.AsQueryable().Provider);
-            mockSet.As<IQueryable<Cliente>>().Setup(m => m.Expression).Returns(clientes.AsQueryable().Expression);
-            mockSet.As<IQueryable<Cliente>>().Setup(m => m.ElementType).Returns(clientes.AsQueryable().ElementType);
-            mockSet.As<IQueryable<Cliente>>().Setup(m => m.GetEnumerator()).Returns(clientes.AsQueryable().GetEnumerator());
-
-            mockSet.Setup(x => x.FirstOrDefaultAsync(It.IsAny<Expression<Func<Cliente, bool>>>(), default))
-                .ReturnsAsync(cliente);
-
-            var mockDataContext = new Mock<DataContext>();
-            mockDataContext.Setup(x => x.Clientes).Returns(mockSet.Object);
-
-            var repository = new ClienteRepository(Mock.Of<IUserRepository>(), mockDataContext.Object);
+            var cliente = new Cliente { Id = 1, Nome = "Test", Email = "test@gmail.com", Endereco = "Rua oi", Telefone = "1198789675", UserId = "1" };
+            _context.Clientes.Add(cliente);
+            _context.SaveChanges();
 
             // Act
-            var result = await repository.GetCliente(cliente.Id);
+            var result = await _clienteRepository.GetCliente(1);
 
             // Assert
-            Assert.NotNull(result);
-            Assert.Equal(cliente.Id, result.Id);
             Assert.Equal(cliente.Nome, result.Nome);
+            Assert.Equal(cliente.Email, result.Email);
         }
 
         [Fact]
-        public async Task AddCliente_ValidCliente_ReturnsCliente()
+        public async Task AddCliente_AddsAndReturnsCliente_WhenUserExists()
         {
             // Arrange
-            var cliente = new Cliente { Id = 1, Nome = "Cliente 1", UserId = "1" };
-            var user = new User { Uid = "1", NomeEmpresa = "Empresa X" };
+            var cliente = new Cliente { Id = 2, Nome = "Test", Email = "test@gmail.com", Endereco = "Rua oi", Telefone = "1198789675", UserId = "2" };
+            var user = new User { Uid = "user-id-1" };
 
-            var mockUserRepository = new Mock<IUserRepository>();
-            mockUserRepository.Setup(x => x.GetUserById(cliente.UserId)).ReturnsAsync(user);
-
-            var clientes = new List<Cliente>();
-            var mockSet = new Mock<DbSet<Cliente>>();
-            mockSet.Setup(x => x.AddAsync(It.IsAny<Cliente>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync((Cliente c, CancellationToken ct) =>
-                {
-                    clientes.Add(c);
-                    return Mock.Of<EntityEntry<Cliente>>(e => e.Entity == c);
-                });
-
-            var mockDataContext = new Mock<DataContext>();
-            mockDataContext.Setup(x => x.Clientes).Returns(mockSet.Object);
-            mockDataContext.Setup(x => x.SaveChangesAsync(It.IsAny<CancellationToken>())).ReturnsAsync(1);
-
-            var repository = new ClienteRepository(mockUserRepository.Object, mockDataContext.Object);
+            _mockUserRepository.Setup(m => m.GetUserById("user-id-1")).ReturnsAsync(user);
 
             // Act
-            var result = await repository.AddCliente(cliente);
+            var result = await _clienteRepository.AddCliente(cliente);
 
             // Assert
             Assert.NotNull(result);
-            Assert.Equal(cliente.Id, result.Id);
             Assert.Equal(cliente.Nome, result.Nome);
-            mockDataContext.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
+            Assert.Equal(1, _context.Clientes.Count());
+        }
+
+        [Fact]
+        public async Task GetClientes_ReturnsAllClientes()
+        {
+            // Arrange
+            _context.Clientes.RemoveRange(_context.Clientes);
+            _context.SaveChanges();
+
+            _context.Clientes.Add(new Cliente { Id = 3, Nome = "Test 3", Email = "test3@gmail.com", Endereco = "Rua oi", Telefone = "1198789675", UserId = "3" });
+            _context.Clientes.Add(new Cliente { Id = 4, Nome = "Test 4", Email = "test4@gmail.com", Endereco = "Rua Hi", Telefone = "1197748478", UserId = "4" });
+            _context.Clientes.Add(new Cliente { Id = 5, Nome = "Test 5", Email = "test5@gmail.com", Endereco = "Rua By", Telefone = "1190991729", UserId = "5" });
+            _context.SaveChanges();
+
+            // Act
+            var result = await _clienteRepository.GetClientes();
+
+            // Assert
+            Assert.Equal(3, result.Count());
+            Assert.Collection(result,
+                item => Assert.Equal("Test 3", item.Nome),
+                item => Assert.Equal("Test 4", item.Nome),
+                item => Assert.Equal("Test 5", item.Nome));
         }
     }
 }
